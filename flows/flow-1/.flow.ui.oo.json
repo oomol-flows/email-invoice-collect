@@ -1,0 +1,140 @@
+{
+  "nodes": [
+    {
+      "scriptletHeight": 517.9761334658466,
+      "id": "+python#1",
+      "contentWidth": 585.3783264487506,
+      "selected": false,
+      "dragging": false,
+      "position": {
+        "x": 0,
+        "y": 771
+      },
+      "positionAbsolute": {
+        "x": -307.47863519687917,
+        "y": 33.077631873057356
+      },
+      "width": 599,
+      "height": 412
+    },
+    {
+      "id": "+python#4",
+      "contentWidth": 530,
+      "selected": false,
+      "dragging": false,
+      "position": {
+        "x": 649,
+        "y": 0
+      },
+      "positionAbsolute": {
+        "x": 317.5035460793438,
+        "y": -538.4276935707297
+      },
+      "width": 544,
+      "height": 257
+    },
+    {
+      "id": "+python#6",
+      "contentWidth": 530,
+      "selected": false,
+      "dragging": false,
+      "position": {
+        "x": 649,
+        "y": 1289
+      },
+      "positionAbsolute": {
+        "x": 644.3923556942277,
+        "y": 1289
+      },
+      "width": 544,
+      "height": 892
+    },
+    {
+      "id": "+python#3",
+      "contentWidth": 530,
+      "selected": false,
+      "dragging": false,
+      "position": {
+        "x": 1309.4102964118563,
+        "y": 1289
+      },
+      "positionAbsolute": {
+        "x": 1309.4102964118563,
+        "y": 1283.981848373056
+      },
+      "width": 544,
+      "height": 292
+    }
+  ],
+  "edges": [
+    {
+      "id": "38b5d259-cb2d-4ab2-8ae3-60d606bfb767",
+      "connection": {
+        "from": {
+          "type": "from_node",
+          "source": {
+            "node_id": "+python#1",
+            "output_handle": "mails_may_not_include_invoice"
+          }
+        },
+        "to": {
+          "type": "to_node",
+          "target": {
+            "node_id": "+python#4",
+            "input_handle": "mails"
+          }
+        }
+      },
+      "gradientColor": [
+        "var(--edge-python)",
+        "var(--edge-python)"
+      ]
+    },
+    {
+      "id": "9cbdc51e-212c-4063-b21c-706e1fdec597",
+      "connection": {
+        "from": {
+          "type": "from_node",
+          "source": {
+            "node_id": "+python#1",
+            "output_handle": "mails_may_include_invoice"
+          }
+        },
+        "to": {
+          "type": "to_node",
+          "target": {
+            "node_id": "+python#6",
+            "input_handle": "mails"
+          }
+        }
+      },
+      "gradientColor": [
+        "var(--edge-python)",
+        "var(--edge-python)"
+      ]
+    },
+    {
+      "id": "ef8cf8bc-5fa8-4f9f-a529-6700ada081f4",
+      "connection": {
+        "from": {
+          "type": "from_node",
+          "source": {
+            "node_id": "+python#6",
+            "output_handle": "attachments"
+          }
+        },
+        "to": {
+          "type": "to_node",
+          "target": {
+            "node_id": "+python#3",
+            "input_handle": "attachments"
+          }
+        }
+      },
+      "gradientColor": [
+        "var(--edge-json)",
+        "var(--edge-json)"
+      ]
+    }
+  ]
+}

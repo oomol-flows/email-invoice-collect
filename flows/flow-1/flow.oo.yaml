@@ -1,0 +1,128 @@
+nodes:
+  - task:
+      ui:
+        default_width: 530
+      icon: ":logos:python:"
+      inputs_def:
+        - handle: email
+          description: Input
+          json_schema:
+            type: string
+          value: input value
+        - handle: password
+          json_schema:
+            type: string
+            contentMediaType: oomol/secret
+        - handle: from_date
+          json_schema:
+            type: string
+            format: date
+        - handle: to_date
+          json_schema:
+            type: string
+            format: date
+      outputs_def:
+        - handle: mails_may_not_include_invoice
+          json_schema:
+            contentMediaType: oomol/var
+        - handle: mails_may_include_invoice
+          json_schema:
+            contentMediaType: oomol/var
+      executor:
+        name: python
+        options:
+          entry: scriptlets/+python#1.py
+    title: "Get mails from 163 inbox"
+    node_id: +python#1
+    inputs_from:
+      - handle: email
+        value: zl343376595@163.com
+      - handle: from_date
+        value: 2024-09-01
+      - handle: to_date
+        value: 2024-09-30
+      - handle: password
+        value: Custom,163-mail-auth-secret,pwd
+    description: 从 163 邮箱读取邮件 id 列表
+  - task:
+      ui:
+        default_width: 530
+      icon: ":logos:python:"
+      inputs_def:
+        - handle: mails
+          description: Input
+          json_schema:
+            contentMediaType: oomol/var
+          value: input value
+      outputs_def:
+        []
+      executor:
+        name: python
+        options:
+          entry: scriptlets/+python#4.py
+    title: Mails may not include invoice
+    node_id: +python#4
+    inputs_from:
+      - handle: mails
+        from_node:
+          - node_id: +python#1
+            output_handle: mails_may_not_include_invoice
+    description: 展示不会被处理的邮件标题和时间
+  - task:
+      ui:
+        default_width: 530
+      icon: ":logos:python:"
+      inputs_def:
+        - handle: mails
+          description: Input
+          json_schema:
+            contentMediaType: oomol/var
+          value: input value
+      outputs_def:
+        - handle: attachments
+          description: Output
+          json_schema:
+            type: object
+            properties:
+              field0:
+                type: string
+      executor:
+        name: python
+        options:
+          entry: scriptlets/+python#6.py
+    title: Get invoice file
+    node_id: +python#6
+    inputs_from:
+      - handle: mails
+        from_node:
+          - node_id: +python#1
+            output_handle: mails_may_include_invoice
+    description: 展示处理的邮件，并尝试下载发票
+  - task:
+      ui:
+        default_width: 530
+      icon: ":logos:python:"
+      inputs_def:
+        - handle: attachments
+          description: Input
+          json_schema:
+            {}
+          value: input value
+      outputs_def:
+        - handle: out
+          description: Output
+          json_schema:
+            type: string
+      executor:
+        name: python
+        options:
+          entry: scriptlets/+python#3.py
+    title: Read invoice
+    node_id: +python#3
+    inputs_from:
+      - handle: attachments
+        value:
+        from_node:
+          - node_id: +python#6
+            output_handle: attachments
+    description: 打开发票，并读取发票内容
