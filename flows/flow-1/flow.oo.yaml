@@ -92,12 +92,12 @@ nodes:
           entry: scriptlets/+python#6.py
     title: Get invoice file
     node_id: +python#6
+    description: 展示处理的邮件，并尝试下载发票
     inputs_from:
       - handle: mails
         from_node:
           - node_id: +python#1
             output_handle: mails_may_include_invoice
-    description: 展示处理的邮件，并尝试下载发票
   - task:
       ui:
         default_width: 530
@@ -106,7 +106,10 @@ nodes:
         - handle: attachments
           description: Input
           json_schema:
-            {}
+            type: object
+            properties:
+              field0:
+                type: string
           value: input value
       outputs_def:
         - handle: out
@@ -119,10 +122,11 @@ nodes:
           entry: scriptlets/+python#3.py
     title: Read invoice
     node_id: +python#3
+    description: 打开发票，并读取发票内容，仅通过二维码读取，没有二维码无法读取，会判断为非发票
     inputs_from:
       - handle: attachments
         value:
+          {}
         from_node:
           - node_id: +python#6
             output_handle: attachments
-    description: 打开发票，并读取发票内容

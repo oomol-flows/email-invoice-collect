@@ -81,7 +81,7 @@ def get_attachments(mails_attachments, mail_data):
                 attachment_meta = {
                     "mail_id": message_id,
                     "title": decoded_file_name,
-                    "attachement_path": mail_attachement_path,
+                    "attachement_path": file_path,
                     "date": envelope.date.strftime("%Y-%m-%d"),
                 }
                 if message_id in mails_attachments:
