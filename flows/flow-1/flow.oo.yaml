@@ -112,10 +112,13 @@ nodes:
                 type: string
           value: input value
       outputs_def:
-        - handle: out
+        - handle: invoice_num_price_map
           description: Output
           json_schema:
-            type: string
+            type: object
+            properties:
+              field0:
+                type: string
       executor:
         name: python
         options:
@@ -130,3 +133,33 @@ nodes:
         from_node:
           - node_id: +python#6
             output_handle: attachments
+  - task:
+      ui:
+        default_width: 530
+      icon: ":logos:python:"
+      inputs_def:
+        - handle: map1
+          description: Input
+          json_schema:
+            type: object
+            properties:
+              field0:
+                type: string
+          value: input value
+      outputs_def:
+        []
+      executor:
+        name: python
+        options:
+          entry: scriptlets/+python#2.py
+    title: Write to Excel
+    node_id: +python#2
+    inputs_from:
+      - handle: in
+      - handle: map1
+        value:
+          {}
+        from_node:
+          - node_id: +python#3
+            output_handle: invoice_num_price_map
+    description: 将发票号和价格写入 excel

@@ -1,3 +1,5 @@
 IMAPClient==3.0.1
 beautifulsoup4==4.12.3
 pandas==2.2.2
+PyMuPDF==1.24.11
+zbarlight==3.0
