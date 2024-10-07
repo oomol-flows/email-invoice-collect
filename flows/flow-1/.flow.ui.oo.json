@@ -20,15 +20,15 @@
     {
       "id": "+python#4",
       "contentWidth": 530,
-      "selected": false,
+      "selected": true,
       "dragging": false,
       "position": {
         "x": 649,
-        "y": 440.20685448174714
+        "y": 334.05501665817417
       },
       "positionAbsolute": {
-        "x": 643.8210958296265,
-        "y": 440.20685448174714
+        "x": 649,
+        "y": 334.05501665817417
       },
       "width": 544,
       "height": 1260
@@ -68,7 +68,7 @@
     {
       "id": "+python#2",
       "contentWidth": 530,
-      "selected": true,
+      "selected": false,
       "dragging": false,
       "position": {
         "x": 1977.5014154488165,

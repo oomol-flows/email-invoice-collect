@@ -4,13 +4,14 @@ import email
 from oocana import Context
 import pandas as pd
 import json
+import zipfile
 
 # 文件下载到工作空间
 temp_file_dir = "/app/workspace/temp_file"
 
 
 def ensure_dir(path):
-    if not os.path.exists(path):
+    if not (os.path.exists(path) &os.path.isdir(path)):
         os.makedirs(path)
 
 
@@ -24,8 +25,40 @@ class AttachmentMeta:
     def to_json(self):
         return json.dumps(self, default=lambda o: o.__dict__, sort_keys=True, indent=4)
 
+def unzip_and_get_pdf(file_path, mails_attachments, mail_id, date):
+    file_path_without_ext, _ = os.path.splitext(file_path)
 
-print("ab path ", os.path.abspath(temp_file_dir))
+    ensure_dir(file_path_without_ext)
+    with zipfile.ZipFile(file_path, 'r') as zip_ref:
+        for file in zip_ref.namelist():
+            ab_path = os.path.abspath(file)
+            _, ext = os.path.splitext(ab_path)
+            
+            if (ext.upper() == ".ZIP"):
+                unzip_and_get_pdf(ab_path, mails_attachments, mail_id, date)
+            else:
+                filename = file.encode('cp437').decode('utf8')
+                dir_path = os.path.dirname(filename)
+                if (dir_path != ""):
+                    continue
+                if (ext.upper() == ".PDF"):
+                    zip_ref.extract(file, file_path_without_ext)
+                    os.chdir(file_path_without_ext)
+                    os.rename(file, filename)
+
+                    attachment_meta = {
+                        "mail_id": mail_id,
+                        "title": filename,
+                        "attachement_path": os.path.join(dir_path, filename),
+                        "date": date,
+                    }
+                    if mail_id in mails_attachments:
+                        mails_attachments[mail_id].append(attachment_meta)
+                    else:
+                        mails_attachments[mail_id] = [attachment_meta]
+
+
+
 
 
 # allows you to download attachments
@@ -50,7 +83,6 @@ def get_attachments(mails_attachments, mail_data):
 
         file_name = part.get_filename()  # Get the filename
         decoded_file_name = str(make_header(decode_header(file_name)))
-        print("file name ", decoded_file_name)
         if bool(decoded_file_name):
             _, file_extension = os.path.splitext(decoded_file_name)
             if file_extension.upper() != ".PDF" and file_extension.upper() != ".ZIP":
@@ -74,15 +106,17 @@ def get_attachments(mails_attachments, mail_data):
                     part.get_payload(decode=True)
                 )  # Returns the part is carrying, or it's payload, and decodes [3]
 
+            date = envelope.date.strftime("%Y-%m-%d")
             if file_extension.upper() == ".ZIP":
                 # TODO 解压 zip 文件，更新地址
-                print("zip file ", file_extension)
+                print("zip file ", file_path)
+                unzip_and_get_pdf(file_path, mails_attachments, message_id, date)
             else:
                 attachment_meta = {
                     "mail_id": message_id,
                     "title": decoded_file_name,
                     "attachement_path": file_path,
-                    "date": envelope.date.strftime("%Y-%m-%d"),
+                    "date": date,
                 }
                 if message_id in mails_attachments:
                     mails_attachments[message_id].append(attachment_meta)

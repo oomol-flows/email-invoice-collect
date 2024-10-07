@@ -155,7 +155,6 @@ nodes:
     title: Write to Excel
     node_id: +python#2
     inputs_from:
-      - handle: in
       - handle: map1
         value:
           {}

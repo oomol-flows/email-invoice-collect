@@ -37,7 +37,6 @@ def main(inputs: dict, context: Context):
         envelope = data[b"ENVELOPE"]
         subject = envelope.subject.decode()
         decodedSubject = str(make_header(decode_header(subject)))
-        print(decodedSubject)
         if mail_may_include_invoice_by_subject(decodedSubject):
             mails_may_include_invoice.append(data)
             continue

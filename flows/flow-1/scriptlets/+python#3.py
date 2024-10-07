@@ -37,7 +37,8 @@ def main(inputs: dict, context: Context):
             title = attach["title"]
             file_path = attach["attachement_path"]
             doc = pymupdf.open(file_path)
-
+            if (doc.page_count == 0):
+                continue
             # 仅认为发票只有一页
             pix = doc[0].get_pixmap(matrix=pymupdf.Matrix(3, 3))
             pix.save(file_path + ".png")
@@ -54,14 +55,19 @@ def main(inputs: dict, context: Context):
                 price = float(ret["price"])
             except:
                 continue
+            # invoice_col 中包含ret["invoice_number"]
+            if (ret["invoice_number"] in invoice_col):
+                continue
             total_price = total_price + price
             invoice_col.append(ret["invoice_number"])
             price_col.append(price)
             invoice_number_price_map[ret["invoice_number"]] = price
 
-    invoice_col.append("总金额")
-    price_col.append(total_price)
+    invoice_col.append("合计")
+    tp = rounded_number = round(total_price, 2)
+    price_col.append(tp)
 
+    invoice_number_price_map["合计"] = tp
     df = pd.DataFrame({"发票号": invoice_col, "金额": price_col})
     context.preview(df)
 
